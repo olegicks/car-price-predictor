@@ -216,9 +216,17 @@ function App() {
           </label>
         </div>
 
-        <div className="advanced">
-          <h3>Advanced options</h3>
-          <p style={{ marginTop: "-25px" }}>
+        <div
+          className="advanced"
+          style={{
+            marginTop: "8px",
+          }}
+        >
+          <h3 style={{ marginTop: 0, marginBottom: "2px" }}>
+            Advanced options
+          </h3>
+
+          <p style={{ marginTop: 0 }}>
             These fields are optional and can be set to Not specified.
           </p>
 
