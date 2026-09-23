@@ -1,10 +1,11 @@
 from pathlib import Path
 
+import pandas as pd
+from catboost import CatBoostRegressor
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from catboost import CatBoostRegressor
-import pandas as pd
+
 
 app = FastAPI(title="Car Price Predictor")
 
@@ -27,10 +28,12 @@ class Car(BaseModel):
     model: str
     year: int
     mileage: float
-    engine: str
-    transmission: str
-    drivetrain: str
-    fuel_type: str
+
+    engine: str | None = None
+    transmission: str | None = None
+    drivetrain: str | None = None
+    fuel_type: str | None = None
+
     accidents_or_damage: float | None = None
     one_owner: float | None = None
     personal_use_only: float | None = None
@@ -48,6 +51,17 @@ def root():
 @app.post("/predict")
 def predict(car: Car):
     data = pd.DataFrame([car.model_dump()])
+
+    categorical_columns = [
+        "engine",
+        "transmission",
+        "drivetrain",
+        "fuel_type",
+    ]
+
+    for column in categorical_columns:
+        data[column] = data[column].fillna("Unknown")
+
     prediction = model.predict(data)[0]
 
     return {

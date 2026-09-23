@@ -2,29 +2,32 @@ import { useState } from "react";
 import "./App.css";
 import manufacturers from "./manufacturers.json";
 
+const emptyAdvanced = {
+  engine: "",
+  fuel_type: "",
+  transmission: "",
+  drivetrain: "",
+  accidents_or_damage: null,
+  one_owner: null,
+  personal_use_only: null,
+  seller_rating: null,
+  driver_rating: null,
+  driver_reviews_num: 0,
+  mpg_avg: null,
+};
+
 const initialData = {
   manufacturer: "Toyota",
   model: "Camry",
   year: 2020,
   mileage: 45000,
-  engine: "2.5L I4",
-  fuel_type: "Gasoline",
-  transmission: "Automatic",
-  drivetrain: "FWD",
-  accidents_or_damage: 0,
-  one_owner: 1,
-  personal_use_only: 1,
-  seller_rating: 4.8,
-  driver_rating: 4.7,
-  driver_reviews_num: 100,
-  mpg_avg: 30,
+  ...emptyAdvanced,
 };
 
 const examples = [
   {
     name: "Toyota Camry",
     data: {
-      ...initialData,
       manufacturer: "Toyota",
       model: "Camry",
       year: 2020,
@@ -34,45 +37,37 @@ const examples = [
   {
     name: "Honda Civic",
     data: {
-      ...initialData,
       manufacturer: "Honda",
       model: "Civic",
       year: 2020,
       mileage: 42000,
-      engine: "2.0L I4",
     },
   },
   {
     name: "Ford F-150",
     data: {
-      ...initialData,
       manufacturer: "Ford",
       model: "F-150",
       year: 2019,
       mileage: 68000,
-      engine: "5.0L V8",
     },
   },
   {
     name: "BMW 3 Series",
     data: {
-      ...initialData,
       manufacturer: "BMW",
       model: "3 Series",
       year: 2021,
       mileage: 32000,
-      engine: "2.0L I4",
     },
   },
   {
     name: "Toyota Corolla",
     data: {
-      ...initialData,
       manufacturer: "Toyota",
       model: "Corolla",
       year: 2021,
       mileage: 38000,
-      engine: "1.8L I4",
     },
   },
 ];
@@ -85,18 +80,39 @@ function App() {
 
   const update = (key, value) => {
     setForm({ ...form, [key]: value });
+    setPrice(null);
+  };
+
+  const selectExample = (data) => {
+    setForm({
+      ...data,
+      ...emptyAdvanced,
+    });
+
+    setAdvanced(false);
+    setPrice(null);
   };
 
   const predict = async () => {
     setLoading(true);
+
+    const payload = {
+      ...form,
+      engine: form.engine || null,
+      fuel_type: form.fuel_type || null,
+      transmission: form.transmission || null,
+      drivetrain: form.drivetrain || null,
+    };
 
     try {
       const response = await fetch(
         "https://car-price-predictor-e2qh.onrender.com/predict",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         }
       );
 
@@ -159,6 +175,7 @@ function App() {
 
           <label className="full">
             Mileage: <strong>{form.mileage.toLocaleString()} miles</strong>
+
             <input
               type="range"
               min="0"
@@ -171,6 +188,7 @@ function App() {
         </div>
 
         <button
+          type="button"
           className="advanced-btn"
           onClick={() => setAdvanced(!advanced)}
         >
@@ -194,6 +212,7 @@ function App() {
                 value={form.fuel_type}
                 onChange={(e) => update("fuel_type", e.target.value)}
               >
+                <option value="">Not specified</option>
                 <option>Gasoline</option>
                 <option>Diesel</option>
                 <option>Electric</option>
@@ -209,6 +228,7 @@ function App() {
                 value={form.transmission}
                 onChange={(e) => update("transmission", e.target.value)}
               >
+                <option value="">Not specified</option>
                 <option>Automatic</option>
                 <option>Manual</option>
                 <option>CVT</option>
@@ -222,6 +242,7 @@ function App() {
                 value={form.drivetrain}
                 onChange={(e) => update("drivetrain", e.target.value)}
               >
+                <option value="">Not specified</option>
                 <option>FWD</option>
                 <option>RWD</option>
                 <option>AWD</option>
@@ -232,11 +253,15 @@ function App() {
             <label>
               Accidents / damage
               <select
-                value={form.accidents_or_damage}
+                value={form.accidents_or_damage ?? ""}
                 onChange={(e) =>
-                  update("accidents_or_damage", Number(e.target.value))
+                  update(
+                    "accidents_or_damage",
+                    e.target.value === "" ? null : Number(e.target.value)
+                  )
                 }
               >
+                <option value="">Not specified</option>
                 <option value="0">No</option>
                 <option value="1">Yes</option>
               </select>
@@ -245,11 +270,15 @@ function App() {
             <label>
               One owner
               <select
-                value={form.one_owner}
+                value={form.one_owner ?? ""}
                 onChange={(e) =>
-                  update("one_owner", Number(e.target.value))
+                  update(
+                    "one_owner",
+                    e.target.value === "" ? null : Number(e.target.value)
+                  )
                 }
               >
+                <option value="">Not specified</option>
                 <option value="1">Yes</option>
                 <option value="0">No</option>
               </select>
@@ -258,11 +287,15 @@ function App() {
             <label>
               Personal use only
               <select
-                value={form.personal_use_only}
+                value={form.personal_use_only ?? ""}
                 onChange={(e) =>
-                  update("personal_use_only", Number(e.target.value))
+                  update(
+                    "personal_use_only",
+                    e.target.value === "" ? null : Number(e.target.value)
+                  )
                 }
               >
+                <option value="">Not specified</option>
                 <option value="1">Yes</option>
                 <option value="0">No</option>
               </select>
@@ -272,16 +305,20 @@ function App() {
               MPG
               <input
                 type="number"
-                value={form.mpg_avg}
+                value={form.mpg_avg ?? ""}
                 onChange={(e) =>
-                  update("mpg_avg", Number(e.target.value))
+                  update(
+                    "mpg_avg",
+                    e.target.value === "" ? null : Number(e.target.value)
+                  )
                 }
+                placeholder="e.g. 30"
               />
             </label>
           </div>
         )}
 
-        <button onClick={predict} disabled={loading}>
+        <button type="button" onClick={predict} disabled={loading}>
           {loading ? "Predicting..." : "Predict Price"}
         </button>
 
@@ -305,12 +342,10 @@ function App() {
         <div className="example-list">
           {examples.map((example) => (
             <button
+              type="button"
               key={example.name}
               className="example"
-              onClick={() => {
-                setForm(example.data);
-                setPrice(null);
-              }}
+              onClick={() => selectExample(example.data)}
             >
               {example.name}
             </button>
