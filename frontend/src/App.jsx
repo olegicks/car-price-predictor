@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import manufacturers from "./manufacturers.json";
 
 const initialData = {
   manufacturer: "Toyota",
@@ -65,16 +66,11 @@ function App() {
               value={form.manufacturer}
               onChange={(e) => update("manufacturer", e.target.value)}
             >
-              <option>Toyota</option>
-              <option>Ford</option>
-              <option>Honda</option>
-              <option>BMW</option>
-              <option>Mercedes-Benz</option>
-              <option>Chevrolet</option>
-              <option>Volkswagen</option>
-              <option>Nissan</option>
-              <option>Hyundai</option>
-              <option>Kia</option>
+              {manufacturers.map((manufacturer) => (
+                <option key={manufacturer} value={manufacturer}>
+                  {manufacturer}
+                </option>
+              ))}
             </select>
           </label>
 
@@ -185,7 +181,9 @@ function App() {
               One owner
               <select
                 value={form.one_owner}
-                onChange={(e) => update("one_owner", Number(e.target.value))}
+                onChange={(e) =>
+                  update("one_owner", Number(e.target.value))
+                }
               >
                 <option value="1">Yes</option>
                 <option value="0">No</option>
@@ -210,7 +208,9 @@ function App() {
               <input
                 type="number"
                 value={form.mpg_avg}
-                onChange={(e) => update("mpg_avg", Number(e.target.value))}
+                onChange={(e) =>
+                  update("mpg_avg", Number(e.target.value))
+                }
               />
             </label>
           </div>
