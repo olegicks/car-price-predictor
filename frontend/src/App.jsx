@@ -2,28 +2,6 @@ import { useState } from "react";
 import "./App.css";
 import manufacturers from "./manufacturers.json";
 
-const emptyAdvanced = {
-  engine: "",
-  fuel_type: "",
-  transmission: "",
-  drivetrain: "",
-  accidents_or_damage: null,
-  one_owner: null,
-  personal_use_only: null,
-  seller_rating: null,
-  driver_rating: null,
-  driver_reviews_num: 0,
-  mpg_avg: null,
-};
-
-const initialData = {
-  manufacturer: "Toyota",
-  model: "Camry",
-  year: 2020,
-  mileage: 45000,
-  ...emptyAdvanced,
-};
-
 const examples = [
   {
     name: "Toyota Camry",
@@ -32,6 +10,17 @@ const examples = [
       model: "Camry",
       year: 2020,
       mileage: 45000,
+      engine: "2.5L I4",
+      fuel_type: "Gasoline",
+      transmission: "Automatic",
+      drivetrain: "FWD",
+      accidents_or_damage: 0,
+      one_owner: 1,
+      personal_use_only: 1,
+      seller_rating: 4.8,
+      driver_rating: 4.7,
+      driver_reviews_num: 100,
+      mpg_avg: 30,
     },
   },
   {
@@ -41,6 +30,17 @@ const examples = [
       model: "Civic",
       year: 2020,
       mileage: 42000,
+      engine: "2.0L I4",
+      fuel_type: "Gasoline",
+      transmission: "Automatic",
+      drivetrain: "FWD",
+      accidents_or_damage: 0,
+      one_owner: 1,
+      personal_use_only: 1,
+      seller_rating: 4.8,
+      driver_rating: 4.7,
+      driver_reviews_num: 100,
+      mpg_avg: 33,
     },
   },
   {
@@ -50,6 +50,17 @@ const examples = [
       model: "F-150",
       year: 2019,
       mileage: 68000,
+      engine: "5.0L V8",
+      fuel_type: "Gasoline",
+      transmission: "Automatic",
+      drivetrain: "4WD",
+      accidents_or_damage: 0,
+      one_owner: 1,
+      personal_use_only: 1,
+      seller_rating: 4.7,
+      driver_rating: 4.6,
+      driver_reviews_num: 100,
+      mpg_avg: 20,
     },
   },
   {
@@ -59,6 +70,17 @@ const examples = [
       model: "3 Series",
       year: 2021,
       mileage: 32000,
+      engine: "2.0L I4",
+      fuel_type: "Gasoline",
+      transmission: "Automatic",
+      drivetrain: "RWD",
+      accidents_or_damage: 0,
+      one_owner: 1,
+      personal_use_only: 1,
+      seller_rating: 4.8,
+      driver_rating: 4.7,
+      driver_reviews_num: 100,
+      mpg_avg: 28,
     },
   },
   {
@@ -68,13 +90,25 @@ const examples = [
       model: "Corolla",
       year: 2021,
       mileage: 38000,
+      engine: "1.8L I4",
+      fuel_type: "Gasoline",
+      transmission: "CVT",
+      drivetrain: "FWD",
+      accidents_or_damage: 0,
+      one_owner: 1,
+      personal_use_only: 1,
+      seller_rating: 4.8,
+      driver_rating: 4.7,
+      driver_reviews_num: 100,
+      mpg_avg: 32,
     },
   },
 ];
 
+const initialData = examples[0].data;
+
 function App() {
   const [form, setForm] = useState(initialData);
-  const [advanced, setAdvanced] = useState(false);
   const [price, setPrice] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -84,12 +118,7 @@ function App() {
   };
 
   const selectExample = (data) => {
-    setForm({
-      ...data,
-      ...emptyAdvanced,
-    });
-
-    setAdvanced(false);
+    setForm(data);
     setPrice(null);
   };
 
@@ -187,16 +216,13 @@ function App() {
           </label>
         </div>
 
-        <button
-          type="button"
-          className="advanced-btn"
-          onClick={() => setAdvanced(!advanced)}
-        >
-          {advanced ? "− Hide advanced options" : "+ Advanced options"}
-        </button>
+        <div className="advanced">
+          <h3>Advanced options</h3>
+          <p style={{ marginTop: "-25px" }}>
+            These fields are optional and can be set to Not specified.
+          </p>
 
-        {advanced && (
-          <div className="grid advanced">
+          <div className="grid">
             <label>
               Engine
               <input
@@ -316,7 +342,7 @@ function App() {
               />
             </label>
           </div>
-        )}
+        </div>
 
         <button type="button" onClick={predict} disabled={loading}>
           {loading ? "Predicting..." : "Predict Price"}
