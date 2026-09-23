@@ -29,6 +29,7 @@ main {
 .hero h1 {
   font-size: 44px;
   margin: 12px 0;
+  color: #111;
 }
 
 .hero span {
@@ -36,10 +37,16 @@ main {
 }
 
 .card {
-  background: white;
+  background: #fff;
   border: 1px solid #ddd;
   border-radius: 18px;
   padding: 28px;
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: #111;
 }
 
 .grid {
@@ -54,24 +61,72 @@ label {
   gap: 7px;
   font-size: 13px;
   font-weight: 600;
-  text-transform: capitalize;
+  color: #111;
 }
 
-input {
+input,
+select {
+  width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 9px;
+  background: #fff;
+  color: #111;
   font-size: 14px;
 }
 
-button {
+select option {
+  background: #fff;
+  color: #111;
+}
+
+input::placeholder {
+  color: #777;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #111;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+input[type="range"] {
+  padding: 0;
+  accent-color: #111;
+}
+
+.advanced-btn {
+  width: auto;
+  margin-top: 24px;
+  padding: 10px 0;
+  background: transparent;
+  color: #111;
+  text-align: left;
+}
+
+.advanced-btn:hover {
+  background: transparent;
+  color: #555;
+}
+
+.advanced {
+  margin-top: 18px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+button:not(.advanced-btn) {
   width: 100%;
   margin-top: 28px;
   padding: 15px;
   border: 0;
   border-radius: 10px;
   background: #111;
-  color: white;
+  color: #fff;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -98,6 +153,7 @@ button:disabled {
 .result strong {
   display: block;
   margin-top: 8px;
+  color: #111;
   font-size: 36px;
 }
 
@@ -108,5 +164,9 @@ button:disabled {
 
   .hero h1 {
     font-size: 34px;
+  }
+
+  .full {
+    grid-column: auto;
   }
 }
