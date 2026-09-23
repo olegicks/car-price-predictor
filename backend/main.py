@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -8,16 +10,16 @@ app = FastAPI(title="Car Price Predictor")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_PATH = BASE_DIR / "model" / "car_price_model.cbm"
+
 model = CatBoostRegressor()
-model.load_model("../model/car_price_model.cbm")
+model.load_model(MODEL_PATH)
 
 
 class Car(BaseModel):
