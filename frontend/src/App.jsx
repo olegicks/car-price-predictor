@@ -20,6 +20,57 @@ const initialData = {
   mpg_avg: 30,
 };
 
+const examples = [
+  {
+    name: "Toyota Camry",
+    data: {
+      ...initialData,
+      manufacturer: "Toyota",
+      model: "Camry",
+      year: 2020,
+      mileage: 45000,
+      engine: "2.5L I4",
+      fuel_type: "Gasoline",
+    },
+  },
+  {
+    name: "BMW 3 Series",
+    data: {
+      ...initialData,
+      manufacturer: "BMW",
+      model: "3 Series",
+      year: 2021,
+      mileage: 32000,
+      engine: "2.0L I4",
+      fuel_type: "Gasoline",
+    },
+  },
+  {
+    name: "Ford F-150",
+    data: {
+      ...initialData,
+      manufacturer: "Ford",
+      model: "F-150",
+      year: 2019,
+      mileage: 68000,
+      engine: "5.0L V8",
+      fuel_type: "Gasoline",
+    },
+  },
+  {
+    name: "Porsche 911",
+    data: {
+      ...initialData,
+      manufacturer: "Porsche",
+      model: "911",
+      year: 2022,
+      mileage: 12000,
+      engine: "3.0L H6",
+      fuel_type: "Gasoline",
+    },
+  },
+];
+
 function App() {
   const [form, setForm] = useState(initialData);
   const [advanced, setAdvanced] = useState(false);
@@ -236,6 +287,26 @@ function App() {
             </strong>
           </div>
         )}
+      </section>
+
+      <section className="examples">
+        <h2>Try an example</h2>
+        <p>Select a vehicle to quickly test the model.</p>
+
+        <div className="example-list">
+          {examples.map((example) => (
+            <button
+              key={example.name}
+              className="example"
+              onClick={() => {
+                setForm(example.data);
+                setPrice(null);
+              }}
+            >
+              {example.name}
+            </button>
+          ))}
+        </div>
       </section>
     </main>
   );
