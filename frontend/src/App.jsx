@@ -123,10 +123,17 @@ function App() {
   };
 
   const predict = async () => {
+    if (!form.year || !form.mpg_avg) {
+      alert("Please enter a valid year and MPG.");
+      return;
+    }
+
     setLoading(true);
 
     const payload = {
       ...form,
+      year: Number(form.year),
+      mpg_avg: Number(form.mpg_avg),
       engine: form.engine || null,
       fuel_type: form.fuel_type || null,
       transmission: form.transmission || null,
@@ -194,11 +201,13 @@ function App() {
           <label>
             Year
             <input
-              type="number"
-              min="1900"
-              max="2026"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={form.year}
-              onChange={(e) => update("year", Number(e.target.value))}
+              onChange={(e) =>
+                update("year", e.target.value.replace(/\D/g, ""))
+              }
             />
           </label>
 
@@ -338,13 +347,11 @@ function App() {
             <label>
               MPG
               <input
-                type="number"
+                type="text"
+                inputMode="decimal"
                 value={form.mpg_avg ?? ""}
                 onChange={(e) =>
-                  update(
-                    "mpg_avg",
-                    e.target.value === "" ? null : Number(e.target.value)
-                  )
+                  update("mpg_avg", e.target.value.replace(/[^0-9.]/g, ""))
                 }
                 placeholder="e.g. 30"
               />
