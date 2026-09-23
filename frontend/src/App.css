@@ -173,7 +173,15 @@ button:disabled {
   
 }
 
+.example-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
 .examples {
+  text-align: center;
   margin-top: 28px;
 }
 
@@ -185,12 +193,6 @@ button:disabled {
   margin-top: 0;
   color: #666;
   font-size: 14px;
-}
-
-.example-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .example {
