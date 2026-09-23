@@ -26,8 +26,9 @@ function App() {
   const [price, setPrice] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const update = (key, value) =>
+  const update = (key, value) => {
     setForm({ ...form, [key]: value });
+  };
 
   const predict = async () => {
     setLoading(true);
@@ -38,6 +39,10 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+
+      if (!response.ok) {
+        throw new Error("Prediction failed");
+      }
 
       const data = await response.json();
       setPrice(data.predicted_price);
@@ -67,9 +72,7 @@ function App() {
               onChange={(e) => update("manufacturer", e.target.value)}
             >
               {manufacturers.map((manufacturer) => (
-                <option key={manufacturer} value={manufacturer}>
-                  {manufacturer}
-                </option>
+                <option key={manufacturer}>{manufacturer}</option>
               ))}
             </select>
           </label>
@@ -87,6 +90,8 @@ function App() {
             Year
             <input
               type="number"
+              min="1900"
+              max="2026"
               value={form.year}
               onChange={(e) => update("year", Number(e.target.value))}
             />
@@ -103,30 +108,6 @@ function App() {
               onChange={(e) => update("mileage", Number(e.target.value))}
             />
           </label>
-
-          <label>
-            Engine
-            <input
-              value={form.engine}
-              onChange={(e) => update("engine", e.target.value)}
-              placeholder="e.g. 2.5L I4"
-            />
-          </label>
-
-          <label>
-            Fuel type
-            <select
-              value={form.fuel_type}
-              onChange={(e) => update("fuel_type", e.target.value)}
-            >
-              <option>Gasoline</option>
-              <option>Diesel</option>
-              <option>Electric</option>
-              <option>Hybrid</option>
-              <option>Flex Fuel</option>
-              <option>Other</option>
-            </select>
-          </label>
         </div>
 
         <button
@@ -138,6 +119,30 @@ function App() {
 
         {advanced && (
           <div className="grid advanced">
+            <label>
+              Engine
+              <input
+                value={form.engine}
+                onChange={(e) => update("engine", e.target.value)}
+                placeholder="e.g. 2.5L I4"
+              />
+            </label>
+
+            <label>
+              Fuel type
+              <select
+                value={form.fuel_type}
+                onChange={(e) => update("fuel_type", e.target.value)}
+              >
+                <option>Gasoline</option>
+                <option>Diesel</option>
+                <option>Electric</option>
+                <option>Hybrid</option>
+                <option>Flex Fuel</option>
+                <option>Other</option>
+              </select>
+            </label>
+
             <label>
               Transmission
               <select
